@@ -47,6 +47,7 @@
   </div>
 
   <script>
+    let targetHanzi = "";
     const canvas = document.getElementById("canvas");
     const ctx = canvas.getContext("2d");
 
@@ -96,11 +97,14 @@
         alert("Please enter a Hanzi character first.");
         return;
       }
-
-      console.log("Starting test for:", hanzi);
-
-      // add stroke tester
-      alert("Test started for: " + hanzi);
+      targetHanzi = hanzi;
+      ctz.clearRect(0,0, canvas.width, canvas.height);
+      ctx.font = "200px serif";
+      ctx.textAlign = "center"
+      ctx.textBaseline = "middle";
+      ctx.fillStyle = "#cccccc";
+      ctx.fillText(targetHanzi, canvas.width/2), canvas.height/2);
+      console.log("Starting test for:", targetHanzi);
     }
 
 
@@ -114,4 +118,5 @@
 
 </body>
 </html>
+
 
