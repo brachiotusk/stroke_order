@@ -31,14 +31,14 @@
 
   <h1>Hanzi Stroke Practice</h1>
 
-  <!-- Input box for the Hanzi -->
+
   <div class="input-box">
     <label>Enter Hanzi: </label>
     <input id="hanziInput" type="text" maxlength="1" style="font-size: 24px; width: 60px; text-align: center;">
     <button onclick="startTest()">Start Test</button>
   </div>
 
-  <!-- Drawing canvas -->
+
   <canvas id="canvas" width="400" height="400"></canvas>
 
   <div class="controls">
@@ -62,7 +62,7 @@
       ctx.stroke();
     }
 
-    // Pointer events
+
     canvas.addEventListener("pointerdown", (e) => {
       drawing = true;
       currentStroke = [];
@@ -83,13 +83,13 @@
       strokes.push(currentStroke);
     });
 
-    // Clear canvas
+
     function clearCanvas() {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
       strokes = [];
     }
 
-    // Called when user clicks "Start Test"
+
     function startTest() {
       const hanzi = document.getElementById("hanziInput").value.trim();
       if (!hanzi) {
@@ -99,19 +99,19 @@
 
       console.log("Starting test for:", hanzi);
 
-      // Later: load correct stroke order from dataset
-      // For now: placeholder
+      // add stroke tester
       alert("Test started for: " + hanzi);
     }
 
-    // Called when user finishes drawing
+
     function finishDrawing() {
       console.log("User strokes:", strokes);
 
-      // Placeholder: later compare strokes to correct order
+      // compare strokes for accuracy
       alert("Drawing captured. Strokes: " + strokes.length);
     }
   </script>
 
 </body>
 </html>
+
