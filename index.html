@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Hanzi Stroke Practice</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 20px;
+    }
+
+    #canvas {
+      border: 2px solid #333;
+      touch-action: none;
+      background: #fafafa;
+    }
+
+    .input-box {
+      margin-bottom: 20px;
+    }
+
+    .controls {
+      margin-top: 15px;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Hanzi Stroke Practice</h1>
+
+  <!-- Input box for the Hanzi -->
+  <div class="input-box">
+    <label>Enter Hanzi: </label>
+    <input id="hanziInput" type="text" maxlength="1" style="font-size: 24px; width: 60px; text-align: center;">
+    <button onclick="startTest()">Start Test</button>
+  </div>
+
+  <!-- Drawing canvas -->
+  <canvas id="canvas" width="400" height="400"></canvas>
+
+  <div class="controls">
+    <button onclick="clearCanvas()">Clear</button>
+    <button onclick="finishDrawing()">Finish Drawing</button>
+  </div>
+
+  <script>
+    const canvas = document.getElementById("canvas");
+    const ctx = canvas.getContext("2d");
+
+    let strokes = [];
+    let currentStroke = [];
+    let drawing = false;
+
+    // Draw a point
+    function drawPoint(x, y) {
+      ctx.lineWidth = 6;
+      ctx.lineCap = "round";
+      ctx.lineTo(x, y);
+      ctx.stroke();
+    }
+
+    // Pointer events
+    canvas.addEventListener("pointerdown", (e) => {
+      drawing = true;
+      currentStroke = [];
+      ctx.beginPath();
+    });
+
+    canvas.addEventListener("pointermove", (e) => {
+      if (!drawing) return;
+      const rect = canvas.getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      const y = e.clientY - rect.top;
+      currentStroke.push({ x, y });
+      drawPoint(x, y);
+    });
+
+    canvas.addEventListener("pointerup", () => {
+      drawing = false;
+      strokes.push(currentStroke);
+    });
+
+    // Clear canvas
+    function clearCanvas() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      strokes = [];
+    }
+
+    // Called when user clicks "Start Test"
+    function startTest() {
+      const hanzi = document.getElementById("hanziInput").value.trim();
+      if (!hanzi) {
+        alert("Please enter a Hanzi character first.");
+        return;
+      }
+
+      console.log("Starting test for:", hanzi);
+
+      // Later: load correct stroke order from dataset
+      // For now: placeholder
+      alert("Test started for: " + hanzi);
+    }
+
+    // Called when user finishes drawing
+    function finishDrawing() {
+      console.log("User strokes:", strokes);
+
+      // Placeholder: later compare strokes to correct order
+      alert("Drawing captured. Strokes: " + strokes.length);
+    }
+  </script>
+
+</body>
+</html>
