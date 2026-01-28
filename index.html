@@ -1,29 +1,14 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-  <meta charset="UTF-8" />
-  <title>Hanzi Stroke Practice</title>
+  <meta charset="UTF-8">
+  <title>Hanzi Practice</title>
+  <script src="https://cdn.jsdelivr.net/npm/hanzi-writer@2.1.2/dist/hanzi-writer.min.js"></script>
   <style>
-    body {
-      font-family: sans-serif;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      padding: 20px;
-    }
-
-    #canvas {
-      border: 2px solid #333;
-      touch-action: none;
-      background: #fafafa;
-    }
-
-    .input-box {
-      margin-bottom: 20px;
-    }
-
-    .controls {
-      margin-top: 15px;
+    #writer {
+      width: 300px;
+      height: 300px;
+      margin-top: 20px;
     }
   </style>
 </head>
@@ -31,105 +16,37 @@
 
   <h1>Hanzi Stroke Practice</h1>
 
+  <input id="hanziInput" type="text" maxlength="1" style="font-size: 24px; width: 60px; text-align: center;">
+  <button onclick="loadCharacter()">Load</button>
 
-  <div class="input-box">
-    <label>Enter Hanzi: </label>
-    <input id="hanziInput" type="text" maxlength="1" style="font-size: 24px; width: 60px; text-align: center;">
-    <button onclick="startTest()">Start Test</button>
-  </div>
-
-
-  <canvas id="canvas" width="400" height="400"></canvas>
-
-  <div class="controls">
-    <button onclick="clearCanvas()">Clear</button>
-    <button onclick="finishDrawing()">Finish Drawing</button>
-  </div>
+  <div id="writer"></div>
 
   <script>
-    let targetHanzi = "";
-    const canvas = document.getElementById("canvas");
-    const ctx = canvas.getContext("2d");
+    let writer = null;
 
-    let strokes = [];
-    let currentStroke = [];
-    let drawing = false;
+    function loadCharacter() {
+      const char = document.getElementById("hanziInput").value.trim();
+      if (!char) return;
 
-    // Draw a point
-    function drawPoint(x, y) {
-      ctx.lineWidth = 6;
-      ctx.lineCap = "round";
-      ctx.lineTo(x, y);
-      ctx.stroke();
-    }
+      // Clear previous writer
+      document.getElementById("writer").innerHTML = "";
 
+      writer = HanziWriter.create('writer', char, {
+        width: 300,
+        height: 300,
+        padding: 10,
+        showOutline: true,
+        showCharacter: true,
+        strokeAnimationSpeed: 1,
+        delayBetweenStrokes: 200,
+      });
 
-    canvas.addEventListener("pointerdown", (e) => {
-      drawing = true;
-      currentStroke = [];
-      ctx.beginPath();
-    });
-
-    canvas.addEventListener("pointermove", (e) => {
-      if (!drawing) return;
-      const rect = canvas.getBoundingClientRect();
-      const x = e.clientX - rect.left;
-      const y = e.clientY - rect.top;
-      currentStroke.push({ x, y });
-      drawPoint(x, y);
-    });
-
-    canvas.addEventListener("pointerup", () => {
-      drawing = false;
-      strokes.push(currentStroke);
-    });
-
-
-    function clearCanvas() {
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-      strokes = [];
-    }
-
-
-    function startTest() {
-      const hanzi = document.getElementById("hanziInput").value.trim();
-      if (!hanzi) {
-        alert("Please enter a Hanzi character first.");
-        return;
-      }
-      targetHanzi = hanzi;
-      ctx.clearRect(0,0, canvas.width, canvas.height);
-      ctx.font = "200px serif";
-      ctx.textAlign = "center"
-      ctx.textBaseline = "middle";
-      ctx.fillStyle = "red";
-      ctx.fillText(targetHanzi, canvas.width/2, canvas.height/2);
-      drawHanzi();
-      console.log("Starting test for:", targetHanzi);
-    }
-
-    function drawHanzi() {
-      if (!targetHanzi) return;
-
-      ctx.font = "200px serif";
-      ctx.textAlign = "center"
-      ctx.textBaseline = "middle";
-      ctx.fillStyle = "red";
-      ctx.fillText(targetHanzi, canvas.width/2, canvas.height/2);
-    }
-
-
-    function finishDrawing() {
-      console.log("User strokes:", strokes);
-
-      // compare strokes for accuracy
-      alert("Drawing captured. Strokes: " + strokes.length);
+      writer.quiz();
     }
   </script>
 
 </body>
 </html>
-
 
 
 
